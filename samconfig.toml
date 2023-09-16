@@ -1,0 +1,34 @@
+# Usage (specify env):
+#   sam deploy \
+#       --config-env [devl|prod] \
+#       --s3-bucket [bucket_name] \
+#       --tags CustomerId={customer_id} ProjectId={project_id}
+
+version=0.1
+[default]
+[default.deploy.parameters]
+[devl.deploy.parameters]
+region = "us-west-2"
+s3_prefix = "topshelfsoftware-aws-util-layer"
+stack_name = "topshelfsoftware-aws-util-layer"
+confirm_changeset = false
+capabilities = "CAPABILITY_IAM"
+tags = [
+    "CustomerId=00000"
+]
+parameter_overrides = [
+    "PackageVersion=v0.1.0"
+]
+
+[prod.deploy.parameters]
+region = "us-west-2"
+s3_prefix = "topshelfsoftware-aws-util-layer"
+stack_name = "topshelfsoftware-aws-util-layer"
+confirm_changeset = true
+capabilities = "CAPABILITY_IAM"
+tags = [
+    "CustomerId=00000"
+]
+parameter_overrides = [
+    "PackageVersion=v0.1.0"
+]
