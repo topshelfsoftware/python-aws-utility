@@ -2,10 +2,9 @@
 
 from botocore.exceptions import ClientError as BotoClientError
 
+from topshelfsoftware_aws_util import create_boto3_client
 from topshelfsoftware_util.json import fmt_json
 from topshelfsoftware_util.log import get_logger
-
-from . import create_boto3_client
 
 ssm_client = create_boto3_client(service_name="ssm")
 logger = get_logger(__name__)

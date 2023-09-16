@@ -5,10 +5,9 @@ import json
 import time
 import uuid
 
+from topshelfsoftware_aws_util import create_boto3_client
 from topshelfsoftware_util.json import fmt_json
 from topshelfsoftware_util.log import get_logger
-
-from . import create_boto3_client
 
 sfn_client = create_boto3_client("stepfunctions")
 logger = get_logger(__name__)
