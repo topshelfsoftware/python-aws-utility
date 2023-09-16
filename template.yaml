@@ -1,0 +1,43 @@
+AWSTemplateFormatVersion : '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: AWS Python utility lambda layer
+
+# Versioning: X.Y.Z
+# - X: breaking changes
+# - Y: module or function add
+# - Z: bug fix, function edit
+
+Parameters:
+  PackageVersion:
+    Type: String
+    Description: Version of the package
+    MinLength: '6'
+    MaxLength: '12'
+    AllowedPattern: 'v(\d{1,3})\.(\d{1,3})\.(\d{1,3})'
+    ConstraintDescription: must be of the form vX.Y.Z and follow Semantic Versioning 2.0.0
+
+Resources:
+  # ---------------- Lambda Layer ---------------- #
+  TopshelfsoftwareAwsUtilLayer:
+    Type: AWS::Serverless::LayerVersion
+    Metadata:
+      BuildMethod: makefile
+    Properties:
+      LayerName: topshelfsoftware-aws-util
+      Description: !Ref PackageVersion
+      ContentUri: lambda_layer/
+      CompatibleRuntimes:
+        - python3.9
+        - python3.10
+        - python3.11
+      LicenseInfo: MIT
+      RetentionPolicy: Retain
+  
+  # ---------------- SSM ---------------- #
+  TopshelfsoftwareAwsUtilLayerArn:
+    Type: AWS::SSM::Parameter
+    Properties:
+      Name: /lambda/layer/arn/topshelfsoftware-aws-util
+      Description: !Ref PackageVersion
+      Type: String
+      Value: !Ref TopshelfsoftwareAwsUtilLayer
