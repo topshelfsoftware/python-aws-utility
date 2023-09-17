@@ -8,7 +8,7 @@ REQ_FP := $(MAKEFILE_DIR)/requirements.txt
 LOCAL_PYPI_FP := $(MAKEFILE_DIR)/local_pypi_dir.txt
 LOCAL_PYPI_DIR := $(shell cat ${LOCAL_PYPI_FP})
 PKG_NAME := topshelfsoftware_aws_util
-PKG_VER := 0.1.0
+PKG_VER := 0.1.1
 
 # function to activate the python virtual env
 activate = . $(VENV_DIR)/bin/activate && $1

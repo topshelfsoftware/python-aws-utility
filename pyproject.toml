@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "topshelfsoftware_aws_util"
-version = "0.1.0"
+version = "0.1.1"
 description = "Utility functions for interacting with AWS."
 license="MIT"
 authors = [
