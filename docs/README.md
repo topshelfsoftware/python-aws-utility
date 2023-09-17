@@ -2,6 +2,10 @@
 
 ## Available Modules
 
+### `client`
+
+Facilitate interactions with low-level service clients.
+
 ### `secrets`
 
 Facilitate interactions with Secrets Manager.
