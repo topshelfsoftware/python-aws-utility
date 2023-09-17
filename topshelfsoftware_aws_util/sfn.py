@@ -10,7 +10,7 @@ from topshelfsoftware_util.json import fmt_json
 from topshelfsoftware_util.log import get_logger
 
 sfn_client = create_boto3_client("stepfunctions")
-logger = get_logger(__name__)
+logger = get_logger(__name__, stream=None)
 
 
 class SfnStatus(str, Enum):

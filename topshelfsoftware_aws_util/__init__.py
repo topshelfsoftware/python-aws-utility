@@ -11,9 +11,8 @@ from topshelfsoftware_aws_util.ssm import logger as ssm_logger
 from topshelfsoftware_util.log import get_logger
 
 PACKAGE_NAME = "topshelfsoftware-aws-util"
-LOG_LEVEL = logging.INFO
 
-logger = get_logger(PACKAGE_NAME, LOG_LEVEL)
+logger = get_logger(PACKAGE_NAME, stream=None)
 
 
 def create_boto3_client(service_name: str, region: str = None) -> BaseClient:
@@ -46,8 +45,7 @@ def create_boto3_client(service_name: str, region: str = None) -> BaseClient:
 
 def debug():
     """Set the package Loggers to the DEBUG level."""
-    LOG_LEVEL = logging.DEBUG
-    _set_logger_levels(level=LOG_LEVEL)
+    _set_logger_levels(level=logging.DEBUG)
     return
 
 
@@ -66,7 +64,3 @@ def _set_logger_levels(level: Union[int, str]):
         for handler in logger.handlers:
             handler.setLevel(level)
     return
-
-
-# initialize all package logger levels
-_set_logger_levels(level=LOG_LEVEL)
