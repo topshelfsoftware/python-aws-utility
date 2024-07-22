@@ -1,0 +1,7 @@
+[run]
+source = 
+    topshelfsoftware_aws_util
+
+[report]
+omit =
+    tests/*

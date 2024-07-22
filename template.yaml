@@ -1,6 +1,6 @@
 AWSTemplateFormatVersion : '2010-09-09'
 Transform: AWS::Serverless-2016-10-31
-Description: AWS Python utility lambda layer
+Description: Python AWS utility lambda layer
 
 # Versioning: X.Y.Z
 # - X: breaking changes
@@ -30,6 +30,7 @@ Resources:
         - python3.9
         - python3.10
         - python3.11
+        - python3.12
       LicenseInfo: MIT
       RetentionPolicy: Retain
   

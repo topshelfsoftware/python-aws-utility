@@ -17,9 +17,7 @@ def debug():
 
 def get_package_loggers() -> List[logging.Logger]:
     """Retrieve a list of the Loggers used in the package."""
-    loggers = [
-        client_logger, secrets_logger, sfn_logger, ssm_logger
-    ]
+    loggers = [client_logger, secrets_logger, sfn_logger, ssm_logger]
     return loggers
 
 
@@ -27,6 +25,5 @@ def _set_logger_levels(level: Union[int, str]):
     loggers = get_package_loggers()
     for logger in loggers:
         logger.setLevel(level)
-        for handler in logger.handlers:
-            handler.setLevel(level)
+        [handler.setLevel(level) for handler in logger.handlers]
     return

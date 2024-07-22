@@ -1,0 +1,24 @@
+{
+    "description": "Mock boto3 and verify the systems manager parameter is successfully retrieved",
+    "input": {
+        "stub": {
+            "method": "get_parameter",
+            "parameters": {
+                "Name": "test_parameter"
+            },
+            "response": {
+                "Parameter": {
+                    "Name": "test_parameter",
+                    "Type": "String",
+                    "Value": "test_value",
+                    "Version": 1,
+                    "LastModifiedDate": "2024-07-22T00:00:00.000Z",
+                    "ARN": "arn:aws:ssm:region:account-id:parameter/test_parameter"
+                }
+            }
+        }
+    },
+    "expected_output": {
+        "ssm_value": "test_value"
+    }
+}

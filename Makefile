@@ -1,34 +1,105 @@
-SHELL := /bin/bash
-MAKEFILE_PATH := $(abspath $(lastword $(MAKEFILE_LIST)))
-MAKEFILE_DIR := $(realpath $(dir $(MAKEFILE_PATH)))
-CWD := $(notdir $(patsubst %/,%,$(dir $(MAKEFILE_PATH))))
-VENV_DIR := $(MAKEFILE_DIR)/.venv
-REQ_FP := $(MAKEFILE_DIR)/requirements.txt
+.PHONY: setup update clean \
+		format lint test package \
+		deploy-layer
 
-LOCAL_PYPI_FP := $(MAKEFILE_DIR)/local_pypi_dir.txt
-LOCAL_PYPI_DIR := $(shell cat ${LOCAL_PYPI_FP})
+####### USER INPUTS #######
+AWS_PROFILE :=				# required, no default value
+AWS_REGION ?= us-east-1
+S3_BUCKET :=				# required, no default value
+TAGS := 					# required, no default value
+
+####### CONSTANTS #######
+PROJ_ROOT_DIR := $(patsubst %/,%,$(dir $(abspath $(lastword $(MAKEFILE_LIST)))))
+VENV_DIR := $(PROJ_ROOT_DIR)/.venv
+PKG_DIR := $(PROJ_ROOT_DIR)/package
+PYTHON3 := python3
+LOCAL_PYPI_FP := $(PROJ_ROOT_DIR)/local_pypi_dir.txt
+ifeq ($(wildcard $(LOCAL_PYPI_FP)),)
+# file does not exist
+	LOCAL_PYPI_DIR :=
+else
+# file exists
+    LOCAL_PYPI_DIR := $(shell cat ${LOCAL_PYPI_FP})
+endif
 PKG_NAME := topshelfsoftware_aws_util
-PKG_VER := 0.1.1
+PKG_VER := 0.2.0
 
-# function to activate the python virtual env
-activate = . $(VENV_DIR)/bin/activate && $1
+####### BUILD TARGETS #######
 
-.PHONY: build copy install
+# The setup target creates a virtual env and installs packages as well as pre-commit hooks.
+# It depends on the presence of two scripts: $(VENV_DIR)/bin/activate and $(VENV_DIR)/bin/pre-commit.
+# If a script doesn't exist, it will trigger the targets below to create the
+# virtual env, install packages, and/or install pre-commit hooks.
+setup: $(VENV_DIR)/bin/activate $(VENV_DIR)/bin/pre-commit
 
-all: build copy
+update: setup pip-install pre-commit-install
 
-build:
-	$(call activate,poetry build --format wheel)
+$(VENV_DIR)/bin/activate:
+	@$(MAKE) clean
+	@echo "Setting up development environment using $(PYTHON3)..."
+	$(PYTHON3) -m venv $(VENV_DIR)
+	@$(MAKE) pip-install
+	@$(MAKE) pre-commit-install
+	@echo "Development environment setup complete."
 
-copy:
-	cp $(MAKEFILE_DIR)/dist/$(PKG_NAME)-$(PKG_VER)*.whl $(LOCAL_PYPI_DIR)
+$(VENV_DIR)/bin/pre-commit:
+	@$(MAKE) pip-install
+	@$(MAKE) pre-commit-install
 
-install:
-	@echo "Setting up Python virtual env"
-	python3.9 -m venv $(VENV_DIR)
-	
-	@echo "Upgrading pip"
-	$(call activate,python -m pip install --upgrade pip)
+pip-install:
+	@echo "Upgrading pip..."
+	$(VENV_DIR)/bin/pip install --upgrade pip
+	@echo "Installing required Python packages..."
+	@find $(PROJ_ROOT_DIR) \
+		-path '*/.aws-sam' -prune -o \
+		-path '*/lambda_layer/no_deps' -prune -o \
+		-name 'requirements.txt' -print0 | \
+		xargs -0 -I {} sh -c '$(VENV_DIR)/bin/pip install -r "$$1"' _ {}
 
-	@echo "Installing project dependencies"
-	$(call activate,python -m pip install -r $(REQ_FP))
+pre-commit-install:
+	@echo "Installing pre-commit hooks..."
+	$(VENV_DIR)/bin/pre-commit install
+	$(VENV_DIR)/bin/pre-commit install --hook-type pre-push
+
+# Clean target to remove the virtual environment
+clean:
+	@echo "Removing virtual environment..."
+	rm -rf $(VENV_DIR)
+	@echo "Clean complete."
+
+# Format code using black, then lint using ruff
+format:
+	$(VENV_DIR)/bin/black $(PROJ_ROOT_DIR) && \
+		$(VENV_DIR)/bin/ruff check $(PROJ_ROOT_DIR) --fix
+
+lint:
+	$(VENV_DIR)/bin/ruff check $(PROJ_ROOT_DIR)
+
+# Run all tests
+test:
+	$(VENV_DIR)/bin/pytest -s -v -c $(PROJ_ROOT_DIR)/tests/pytest.ini \
+		--cov --cov-report term --cov-report html --cov-report xml --cov-config $(PROJ_ROOT_DIR)/tests/.coveragerc
+
+test-no-cov:
+	$(VENV_DIR)/bin/pytest -s -v -c $(PROJ_ROOT_DIR)/tests/pytest.ini
+
+# Python package
+package:
+	$(VENV_DIR)/bin/poetry build --format wheel && \
+	if [ -d "$(LOCAL_PYPI_DIR)" ]; then \
+		cp $(PROJ_ROOT_DIR)/dist/$(PKG_NAME)-$(PKG_VER)*.whl $(LOCAL_PYPI_DIR) && \
+		echo "Copied wheel to $(LOCAL_PYPI_DIR)"; \
+	fi
+
+# Lambda layer deployment
+deploy-layer: check-user-inp
+	export AWS_PROFILE=$(AWS_PROFILE) && \
+		sam build --config-file $(PROJ_ROOT_DIR)/samconfig.toml && \
+		sam deploy --config-file $(PROJ_ROOT_DIR)/samconfig.toml --config-env default --region $(AWS_REGION) --s3-bucket $(S3_BUCKET) --tags $(TAGS)
+
+# ensure the required variables are defined by the user
+check-user-inp:
+	$(if $(AWS_PROFILE),,$(error AWS_PROFILE is undefined. Usage: make deploy-layer AWS_PROFILE=<aws-profile> S3_BUCKET=<s3-bucket> TAGS="CustomerId={cid} ProjectId={pid}" [AWS_REGION=us-east-1]))
+	$(if $(AWS_REGION),,$(error AWS_REGION is undefined. Usage: make deploy-layer AWS_PROFILE=<aws-profile> S3_BUCKET=<s3-bucket> TAGS="CustomerId={cid} ProjectId={pid}" [AWS_REGION=us-east-1]))
+	$(if $(S3_BUCKET),,$(error S3_BUCKET is undefined. Usage: make deploy-layer AWS_PROFILE=<aws-profile> S3_BUCKET=<s3-bucket> TAGS="CustomerId={cid} ProjectId={pid}" [AWS_REGION=us-east-1]))
+	$(if $(TAGS),,$(error TAGS is undefined. Usage: make deploy-layer AWS_PROFILE=<aws-profile> S3_BUCKET=<s3-bucket> TAGS="CustomerId={cid} ProjectId={pid}" [AWS_REGION=us-east-1]))

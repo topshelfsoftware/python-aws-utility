@@ -1,0 +1,25 @@
+{
+    "description": "Mock boto3 to trigger an expected boto ClientError",
+    "input": {
+        "stub": {
+            "method": "get_parameter",
+            "parameters": {
+                "Name": "test_parameter"
+            },
+            "response": {
+                "Error": {
+                    "Code": "ParameterNotFound",
+                    "Message": "Parameter test_parameter not found.",
+                    "Type": "Client",
+                    "HttpStatusCode": 400
+                }
+            }
+        },
+        "exception": "botocore.exceptions.ClientError"
+    },
+    "expected_output": {
+        "error": {
+            "code": "ParameterNotFound"
+        }
+    }
+}

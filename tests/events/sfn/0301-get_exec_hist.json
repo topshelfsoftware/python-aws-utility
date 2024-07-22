@@ -1,0 +1,79 @@
+{
+    "description": "Mock boto3 and verify the stepfunctions execution history is successfully retrieved",
+    "input": {
+        "stub": {
+            "method": "get_execution_history",
+            "parameters": {
+                "executionArn": "arn:aws:states:region:account-id:execution:stateMachineName:executionName",
+                "maxResults": 5,
+                "reverseOrder": true
+            },
+            "response": {
+                "events": [
+                    {
+                        "timestamp": "2024-07-22T01:00:00.000Z",
+                        "type": "ExecutionSucceeded",
+                        "id": 3,
+                        "previousEventId": 2,
+                        "executionSucceededEventDetails": {
+                            "output": "{\"result\": \"success\"}"
+                        }
+                    },
+                    {
+                        "timestamp": "2024-07-22T00:01:00.000Z",
+                        "type": "TaskStateEntered",
+                        "id": 2,
+                        "previousEventId": 1,
+                        "stateEnteredEventDetails": {
+                            "name": "TaskState",
+                            "input": "{\"key\": \"value\"}"
+                        }
+                    },
+                    {
+                        "timestamp": "2024-07-22T00:00:00.000Z",
+                        "type": "ExecutionStarted",
+                        "id": 1,
+                        "previousEventId": 0,
+                        "executionStartedEventDetails": {
+                            "input": "{\"key\": \"value\"}",
+                            "roleArn": "arn:aws:iam::account-id:role/role-name"
+                        }
+                    }
+                ]
+            }
+        }
+    },
+    "expected_output": {
+        "events": [
+            {
+                "timestamp": "2024-07-22T01:00:00.000Z",
+                "type": "ExecutionSucceeded",
+                "id": 3,
+                "previousEventId": 2,
+                "executionSucceededEventDetails": {
+                    "output": "{\"result\": \"success\"}"
+                }
+            },
+            {
+                "timestamp": "2024-07-22T00:01:00.000Z",
+                "type": "TaskStateEntered",
+                "id": 2,
+                "previousEventId": 1,
+                "stateEnteredEventDetails": {
+                    "name": "TaskState",
+                    "input": "{\"key\": \"value\"}"
+                }
+            },
+            {
+                "timestamp": "2024-07-22T00:00:00.000Z",
+                "type": "ExecutionStarted",
+                "id": 1,
+                "previousEventId": 0,
+                "executionStartedEventDetails": {
+                    "input": "{\"key\": \"value\"}",
+                    "roleArn": "arn:aws:iam::account-id:role/role-name"
+                }
+            }
+        ]
+    }
+}

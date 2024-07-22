@@ -17,7 +17,7 @@ def get_ssm_value(name: str) -> str:
     ----------
     name: str
         Name of the SSM parameter.
-    
+
     Returns
     -------
     str
@@ -32,7 +32,10 @@ def get_ssm_value(name: str) -> str:
         logger.error(f"failed to retrieve ssm parameter: {name}. Reason: {e}")
         raise e
     except KeyError as e:
-        logger.error(f"failed to retrieve parameter value from ssm response: {name}. Reason: {e}")
+        logger.error(
+            f"failed to retrieve parameter value from ssm response: "
+            f"{name}. Reason: {e}"
+        )
         raise e
     logger.debug(f"ssm parameter value: {val}")
     return val

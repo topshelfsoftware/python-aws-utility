@@ -1,3 +1,9 @@
-poetry>=1
+--trusted-host files.pythonhosted.org --trusted-host pypi.org --trusted-host pypi.python.org 
+# package deps
 boto3>=1.26
-topshelfsoftware-util @ git+https://github.com/topshelfsoftware/python-utility.git@v1.0.0
+
+# dev tools
+poetry~=1.8
+pre-commit~=3.7
+black>=24.4
+ruff>=0.5

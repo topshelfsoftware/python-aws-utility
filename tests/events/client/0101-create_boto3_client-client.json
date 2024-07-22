@@ -1,0 +1,7 @@
+{
+    "description": "Verify the boto3 BaseClient is created succesfully",
+    "input": {
+        "service_name": "s3"
+    },
+    "expected_output": {}
+}

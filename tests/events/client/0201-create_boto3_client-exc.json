@@ -1,0 +1,9 @@
+{
+    "description": "Verify a boto UnknownServiceError is raised with a non-existent AWS service",
+    "input": {
+        "service_name": "service_name_that_does_not_exist",
+        "region": null,
+        "exception": "botoexceptions.UnknownServiceError"
+    },
+    "expected_output": {}
+}
