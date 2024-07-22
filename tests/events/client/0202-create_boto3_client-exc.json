@@ -1,0 +1,9 @@
+{
+    "description": "Verify a boto InvalidRegionError is raised with a non-existent AWS region",
+    "input": {
+        "service_name": "s3",
+        "region": "a_region_that_does_not_exist",
+        "exception": "botoexceptions.InvalidRegionError"
+    },
+    "expected_output": {}
+}
