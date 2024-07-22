@@ -4,7 +4,7 @@ build-backend = "poetry.core.masonry.api"
 
 [tool.poetry]
 name = "topshelfsoftware_aws_util"
-version = "0.1.1"
+version = "0.1.2"
 description = "Utility functions for interacting with AWS."
 license="MIT"
 authors = [
@@ -14,9 +14,9 @@ readme = "./docs/README.md"
 repository = "https://github.com/topshelfsoftware/python-aws-utility"
 
 [tool.poetry.dependencies]
-python = "^3.7"
+python = "^3.9"
 boto3 = "^1.26"
-topshelfsoftware_util = { git = "https://github.com/topshelfsoftware/python-utility.git", tag = "v1.0.0" }
+topshelfsoftware_util = { git = "https://github.com/topshelfsoftware/python-utility.git", tag = "v1.1.0" }
 
 [tool.black]
 line-length = 79
