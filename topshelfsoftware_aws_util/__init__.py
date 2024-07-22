@@ -25,6 +25,5 @@ def _set_logger_levels(level: Union[int, str]):
     loggers = get_package_loggers()
     for logger in loggers:
         logger.setLevel(level)
-        for handler in logger.handlers:
-            handler.setLevel(level)
+        [handler.setLevel(level) for handler in logger.handlers]
     return
