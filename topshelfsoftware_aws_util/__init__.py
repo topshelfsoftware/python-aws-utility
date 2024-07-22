@@ -17,9 +17,7 @@ def debug():
 
 def get_package_loggers() -> List[logging.Logger]:
     """Retrieve a list of the Loggers used in the package."""
-    loggers = [
-        client_logger, secrets_logger, sfn_logger, ssm_logger
-    ]
+    loggers = [client_logger, secrets_logger, sfn_logger, ssm_logger]
     return loggers
 
 

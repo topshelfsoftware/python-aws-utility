@@ -16,11 +16,11 @@ def create_boto3_client(service_name: str, region: str = None) -> BaseClient:
     ----------
     service_name: str
         Name of the AWS service.
-    
+
     region: str, optional
         Region where service abides.
         Default is `None`.
-    
+
     Returns
     -------
     botocore.client.BaseClient

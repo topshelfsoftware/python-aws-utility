@@ -17,7 +17,7 @@ def get_secret_value(secret_id: str) -> str:
     ----------
     secret_id: str
         The ARN or name of the secret to retrieve.
-    
+
     Returns
     -------
     str
@@ -32,7 +32,10 @@ def get_secret_value(secret_id: str) -> str:
         logger.error(f"failed to retrieve secret: {secret_id}. Reason: {e}")
         raise e
     except KeyError as e:
-        logger.error(f"failed to retrieve string from secretsmanager response: {secret_id}. Reason: {e}")
+        logger.error(
+            f"failed to retrieve string from secretsmanager response: "
+            f"{secret_id}. Reason: {e}"
+        )
         raise e
     logger.debug("secret string: <redacted>")
     return val
