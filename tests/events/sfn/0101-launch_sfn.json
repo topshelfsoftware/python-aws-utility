@@ -1,0 +1,20 @@
+{
+    "description": "Mock boto3 and verify the stepfunctions execution is successfully launched",
+    "input": {
+        "stub": {
+            "method": "start_execution",
+            "parameters": {
+                "stateMachineArn": "arn:aws:states:region:account-id:stateMachine:stateMachineName",
+                "name": "executionName",
+                "input": "{\"key\": \"value\"}"
+            },
+            "response": {
+                "executionArn": "arn:aws:states:region:account-id:execution:stateMachineName:executionName",
+                "startDate": "2024-07-22T00:00:00.000Z"
+            }
+        }
+    },
+    "expected_output": {
+        "execution_arn": "arn:aws:states:region:account-id:execution:stateMachineName:executionName"
+    }
+}
