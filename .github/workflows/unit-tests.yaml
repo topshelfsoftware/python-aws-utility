@@ -1,0 +1,38 @@
+name: Unit Tests
+
+on:
+  push:
+    branches:
+      - testing/add-tests
+  pull_request:
+    branches:
+      - main
+
+env:
+  # boto3 needs this env var if region is not
+  # specified when creating clients
+  AWS_DEFAULT_REGION: us-east-1
+
+jobs:
+  unit-test-python3:
+    runs-on: ubuntu-latest
+    
+    strategy:
+      matrix:
+        python-ver: ['3.12', '3.11', '3.10', '3.9']
+    
+    steps:
+      - name: Check out repo
+        uses: actions/checkout@v3
+
+      # Setup Python (faster than using Python container)
+      - name: Install Python ${{ matrix.python-ver }}
+        uses: actions/setup-python@v4
+        with:
+          python-version: ${{ matrix.python-ver }}
+
+      - name: Setup dev environment
+        run: make setup
+
+      - name: Run unit tests with pytest
+        run: make test
