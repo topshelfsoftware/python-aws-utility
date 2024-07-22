@@ -22,7 +22,7 @@ else
     LOCAL_PYPI_DIR := $(shell cat ${LOCAL_PYPI_FP})
 endif
 PKG_NAME := topshelfsoftware_aws_util
-PKG_VER := 0.1.2
+PKG_VER := 0.2.0
 
 ####### BUILD TARGETS #######
 
