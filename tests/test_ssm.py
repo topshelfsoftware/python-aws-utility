@@ -114,7 +114,7 @@ def test_03_get_ssm_value(get_event_as_dict):
         service_error_code=stub_resp["Error"]["Code"],
         service_message=stub_resp["Error"]["Message"],
         http_status_code=stub_resp["Error"]["HttpStatusCode"],
-        expected_params=stub_params
+        expected_params=stub_params,
     )
 
     try:
