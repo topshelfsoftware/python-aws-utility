@@ -6,7 +6,7 @@ import pytest
 
 from topshelfsoftware_logging import get_logger
 
-from conftest import get_json_files
+from conftest import get_json_files, print_section_break
 
 # ----------------------------------------------------------------------------#
 #                               --- Globals ---                               #
@@ -36,6 +36,7 @@ from topshelfsoftware_aws_util import debug, get_package_loggers  # noqa: E402
     "event_file", get_json_files(MODULE_EVENTS_DIR, ["debug"])
 )
 def test_01_debug(get_event_as_dict):
+    print_section_break()
     logger.info(f"Test Description: {get_event_as_dict['description']}")
     pkg_loggers = get_package_loggers()
     assert all(

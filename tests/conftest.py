@@ -1,6 +1,7 @@
 import glob
 import json
 import os
+import shutil
 import sys
 from typing import Generator
 
@@ -76,3 +77,10 @@ def convert_yaml_to_dict(yaml_fp: str) -> dict:
     with open(yaml_fp, "r") as fp:
         yaml_dict = yaml.safe_load(fp)
     return yaml_dict
+
+def print_section_break(char: str = "-") -> str:
+    """Print a section break the width of the terminal
+    by using a string of characters."""
+    terminal_width = shutil.get_terminal_size().columns
+    section_break_str = char * terminal_width
+    print(section_break_str)
