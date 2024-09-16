@@ -16,11 +16,22 @@ logger = get_logger(__name__, stream=None)
 class SfnStatus(str, Enum):
     """Enumeration for step function status."""
 
+    WAITING = "WAITING"  # valid if using an Express Workflow
     RUNNING = "RUNNING"
     SUCCEEDED = "SUCCEEDED"
     FAILED = "FAILED"
     TIMED_OUT = "TIMED_OUT"
     ABORTED = "ABORTED"
+
+    @property
+    def is_complete(self):
+        """True if status is SUCCEEDED or FAILED;
+        otherwise, False."""
+        values = [
+            "SUCCEEDED",
+            "FAILED",
+        ]
+        return self.value in values
 
 
 def launch_sfn(state_machine_arn: str, payload: dict, name: str = None) -> str:
