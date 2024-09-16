@@ -8,7 +8,7 @@ import pytest
 import yaml
 
 import __setup__  # noqa: F401 - need __setup__ for sys path imports to work
-from topshelfsoftware_util.log import get_logger
+from topshelfsoftware_logging import get_logger
 
 # ----------------------------------------------------------------------------#
 #                               --- Globals ---                               #

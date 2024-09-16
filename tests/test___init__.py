@@ -4,7 +4,7 @@ import sys
 
 import pytest
 
-from topshelfsoftware_util.log import get_logger
+from topshelfsoftware_logging import get_logger
 
 from conftest import get_json_files
 

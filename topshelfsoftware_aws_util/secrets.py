@@ -4,7 +4,7 @@ from botocore.exceptions import ClientError as BotoClientError
 
 from topshelfsoftware_aws_util.client import create_boto3_client
 from topshelfsoftware_util.json import fmt_json
-from topshelfsoftware_util.log import get_logger
+from topshelfsoftware_logging import get_logger
 
 secret_client = create_boto3_client(service_name="secretsmanager")
 logger = get_logger(__name__, stream=None)

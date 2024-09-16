@@ -7,7 +7,7 @@ import uuid
 from topshelfsoftware_aws_util.client import create_boto3_client
 from topshelfsoftware_util.common import delay
 from topshelfsoftware_util.json import fmt_json
-from topshelfsoftware_util.log import get_logger
+from topshelfsoftware_logging import get_logger
 
 sfn_client = create_boto3_client("stepfunctions")
 logger = get_logger(__name__, stream=None)
