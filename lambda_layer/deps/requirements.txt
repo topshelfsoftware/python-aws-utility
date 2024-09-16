@@ -1,1 +1,2 @@
-topshelfsoftware-util @ git+https://github.com/topshelfsoftware/python-utility.git@v1.1.0
+topshelfsoftware-polling @ git+https://github.com/topshelfsoftware/python-polling.git@v0.1.0
+topshelfsoftware-util @ git+https://github.com/topshelfsoftware/python-utility.git@v2.0.0

@@ -11,7 +11,6 @@ TAGS := 					# required, no default value
 ####### CONSTANTS #######
 PROJ_ROOT_DIR := $(patsubst %/,%,$(dir $(abspath $(lastword $(MAKEFILE_LIST)))))
 VENV_DIR := $(PROJ_ROOT_DIR)/.venv
-PKG_DIR := $(PROJ_ROOT_DIR)/package
 PYTHON3 := python3
 LOCAL_PYPI_FP := $(PROJ_ROOT_DIR)/local_pypi_dir.txt
 ifeq ($(wildcard $(LOCAL_PYPI_FP)),)
@@ -22,7 +21,7 @@ else
     LOCAL_PYPI_DIR := $(shell cat ${LOCAL_PYPI_FP})
 endif
 PKG_NAME := topshelfsoftware_aws_util
-PKG_VER := 0.2.0
+PKG_VER := 0.3.0
 
 ####### BUILD TARGETS #######
 
@@ -94,8 +93,9 @@ package:
 # Lambda layer deployment
 deploy-layer: check-user-inp
 	export AWS_PROFILE=$(AWS_PROFILE) && \
-		sam build --config-file $(PROJ_ROOT_DIR)/samconfig.toml && \
-		sam deploy --config-file $(PROJ_ROOT_DIR)/samconfig.toml --config-env default --region $(AWS_REGION) --s3-bucket $(S3_BUCKET) --tags $(TAGS)
+		cd $(PROJ_ROOT_DIR) && \
+		sam build --config-file samconfig.toml && \
+		sam deploy --config-file samconfig.toml --config-env default --region $(AWS_REGION) --s3-bucket $(S3_BUCKET) --tags $(TAGS)
 
 # ensure the required variables are defined by the user
 check-user-inp:

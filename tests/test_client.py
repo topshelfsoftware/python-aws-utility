@@ -6,9 +6,9 @@ from botocore import exceptions as botoexceptions  # noqa: F401
 import pytest
 
 from topshelfsoftware_aws_util.client import logger as client_logger
-from topshelfsoftware_util.log import add_log_stream, get_logger
+from topshelfsoftware_logging import add_log_stream, get_logger
 
-from conftest import get_json_files
+from conftest import get_json_files, print_section_break
 
 # ----------------------------------------------------------------------------#
 #                               --- Globals ---                               #
@@ -43,6 +43,7 @@ from topshelfsoftware_aws_util.client import (  # noqa: E402
     get_json_files(MODULE_EVENTS_DIR, ["create_boto3_client", "client"]),
 )
 def test_01_create_boto3_client(get_event_as_dict):
+    print_section_break()
     logger.info(f"Test Description: {get_event_as_dict['description']}")
     svc_name: str = get_event_as_dict["input"]["service_name"]
     client = create_boto3_client(svc_name)
@@ -56,6 +57,7 @@ def test_01_create_boto3_client(get_event_as_dict):
     get_json_files(MODULE_EVENTS_DIR, ["create_boto3_client", "exc"]),
 )
 def test_02_create_boto3_client(get_event_as_dict):
+    print_section_break()
     logger.info(f"Test Description: {get_event_as_dict['description']}")
     service_name: str = get_event_as_dict["input"]["service_name"]
     region: str = get_event_as_dict["input"]["region"]

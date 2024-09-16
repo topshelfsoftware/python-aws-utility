@@ -2,12 +2,14 @@
 
 from enum import Enum
 import json
+from typing import Callable, Optional, Tuple
 import uuid
 
 from topshelfsoftware_aws_util.client import create_boto3_client
-from topshelfsoftware_util.common import delay
+from topshelfsoftware_logging import get_logger
+from topshelfsoftware_polling.polling import poll
+from topshelfsoftware_polling.step import step_exponential_backoff
 from topshelfsoftware_util.json import fmt_json
-from topshelfsoftware_util.log import get_logger
 
 sfn_client = create_boto3_client("stepfunctions")
 logger = get_logger(__name__, stream=None)
@@ -16,11 +18,23 @@ logger = get_logger(__name__, stream=None)
 class SfnStatus(str, Enum):
     """Enumeration for step function status."""
 
+    WAITING = "WAITING"  # valid if using an Express Workflow
     RUNNING = "RUNNING"
     SUCCEEDED = "SUCCEEDED"
     FAILED = "FAILED"
     TIMED_OUT = "TIMED_OUT"
     ABORTED = "ABORTED"
+
+    @property
+    def is_concluded(self):
+        """Indicates the Step Function is done, but not necessarily succeeded.
+        True if status is NOT in WAITING or RUNNING state;
+        otherwise, False."""
+        values = [
+            SfnStatus.WAITING.value,
+            SfnStatus.RUNNING.value,
+        ]
+        return self.value not in values
 
 
 def launch_sfn(state_machine_arn: str, payload: dict, name: str = None) -> str:
@@ -60,36 +74,89 @@ def launch_sfn(state_machine_arn: str, payload: dict, name: str = None) -> str:
     return execution_arn
 
 
-def poll_sfn(execution_arn: str, step: float = 1) -> dict:
-    """Poll the step function for status.
-    Return the execution response once the status is no longer `RUNNING`.
+def status_sfn(execution_arn: str) -> dict:
+    """Status the step function execution.
 
     Parameters
     ----------
     execution_arn: str
         Step Functions execution ARN.
 
-    step: float, Optional
-        Amount of time (in sec) to wait between poll attempts.
-        Default is 1 second.
+    Returns
+    -------
+    dict
+        Step Functions execution response.
+    """
+    logger.debug(f"statusing execution arn: {execution_arn}")
+    res = sfn_client.describe_execution(executionArn=execution_arn)
+    logger.debug(f"sfn execution response: {fmt_json(res)}")
+    return res
+
+
+def poll_sfn(
+    execution_arn: str,
+    step_fun: Callable = step_exponential_backoff,
+    step_fun_kwargs: Optional[dict] = None,
+    timeout: float = 300,
+    max_attempts: Optional[int] = None,
+    ignore_exceptions: Optional[Tuple[Exception, ...]] = None,
+) -> dict:
+    """Poll the step function for status.
+    Return the execution response once the Step Function has concluded.
+
+    Parameters
+    ----------
+    execution_arn: str
+        Step Functions execution ARN.
+
+    step_fun: Callable, optional
+        A callback function to compute the next step in seconds.
+        See `topshelfsoftware_polling.step` for predefined step functions.
+        Default is `topshelfsoftware_polling.step.step_exponential_backoff`.
+
+    step_fun_kwargs: dict, optional
+        Step function kwargs.
+        See `topshelfsoftware_polling.step` for predefined step functions
+        and kwargs.
+        Default is `None`.
+
+    timeout: float, optional
+        Length of poll in seconds.
+        `topshelfsoftware_polling.exceptions.PollTimeLimitReached` raised
+        if this timeout is exceeded.
+        Default is `300`.
+
+    max_attempts: int, optional
+        Maximum number of times the target function
+        `topshelfsoftware_aws_util.sfn.status_sfn` will be called
+        before failing.
+        `topshelfsoftware_polling.exceptions.PollAttemptLimitReached` raised
+        if attempts exceeds this value.
+        Default of `None` means poll with no limit for number of attempts.
+
+    ignore_exceptions: tuple[Exception, ...], optional
+        These exceptions are caught and ignored. Thus, the result is that
+        a retry will be performed on the target function
+        `topshelfsoftware_aws_util.sfn.status_sfn`.
+        Default is `None`.
 
     Returns
     -------
     dict
         Step Functions execution response.
     """
-    sfn_status = SfnStatus.RUNNING.value
-    n = 0
-    while sfn_status == SfnStatus.RUNNING.value:
-        delay(step)
-        n += 1
-
-        logger.debug(f"polling execution arn: {execution_arn}")
-        res = sfn_client.describe_execution(executionArn=execution_arn)
-        logger.info(f"poll #{n:02d} response: {fmt_json(res)}")
-
-        sfn_status = res["status"]
-    logger.info(f"sfn status: {sfn_status}")
+    poll_kwargs = {
+        "fun": status_sfn,
+        "args": (execution_arn,),
+        "step_fun": step_fun,
+        "step_fun_kwargs": step_fun_kwargs,
+        "timeout": timeout,
+        "max_attempts": max_attempts,
+        "check_success": lambda r: SfnStatus(r["status"]).is_concluded,
+        "ignore_exceptions": ignore_exceptions,
+    }
+    res = poll(**poll_kwargs)
+    logger.info(f"sfn response: {fmt_json(res)}")
     return res
 
 

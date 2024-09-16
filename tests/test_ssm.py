@@ -7,9 +7,9 @@ from botocore.stub import Stubber
 import pytest
 
 from topshelfsoftware_aws_util.ssm import logger as ssm_logger
-from topshelfsoftware_util.log import add_log_stream, get_logger
+from topshelfsoftware_logging import add_log_stream, get_logger
 
-from conftest import get_json_files
+from conftest import get_json_files, print_section_break
 
 # ----------------------------------------------------------------------------#
 #                               --- Globals ---                               #
@@ -44,6 +44,7 @@ from topshelfsoftware_aws_util.ssm import (  # noqa: E402
     get_json_files(MODULE_EVENTS_DIR, ["get_ssm_value", "resp"]),
 )
 def test_01_get_ssm_value(get_event_as_dict):
+    print_section_break()
     logger.info(f"Test Description: {get_event_as_dict['description']}")
     stub_method: str = get_event_as_dict["input"]["stub"]["method"]
     stub_params: dict = get_event_as_dict["input"]["stub"]["parameters"]
@@ -73,6 +74,7 @@ def test_01_get_ssm_value(get_event_as_dict):
     get_json_files(MODULE_EVENTS_DIR, ["get_ssm_value", "key_err"]),
 )
 def test_02_get_ssm_value(get_event_as_dict):
+    print_section_break()
     logger.info(f"Test Description: {get_event_as_dict['description']}")
     stub_method: str = get_event_as_dict["input"]["stub"]["method"]
     stub_params: dict = get_event_as_dict["input"]["stub"]["parameters"]
@@ -101,6 +103,7 @@ def test_02_get_ssm_value(get_event_as_dict):
     get_json_files(MODULE_EVENTS_DIR, ["get_ssm_value", "exc"]),
 )
 def test_03_get_ssm_value(get_event_as_dict):
+    print_section_break()
     logger.info(f"Test Description: {get_event_as_dict['description']}")
     stub_method: str = get_event_as_dict["input"]["stub"]["method"]
     stub_params: dict = get_event_as_dict["input"]["stub"]["parameters"]

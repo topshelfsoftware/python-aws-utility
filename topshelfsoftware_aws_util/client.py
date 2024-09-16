@@ -4,7 +4,7 @@ from boto3.session import Session as Boto3Session
 from botocore.client import BaseClient
 from botocore.exceptions import InvalidRegionError, UnknownServiceError
 
-from topshelfsoftware_util.log import get_logger
+from topshelfsoftware_logging import get_logger
 
 logger = get_logger(__name__, stream=None)
 

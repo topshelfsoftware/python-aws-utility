@@ -1,0 +1,63 @@
+{
+    "description": "Mock boto3 and verify the stepfunctions execution is successfully polled with FAILED status",
+    "input": {
+        "stub": {
+            "method": "describe_execution",
+            "parameters": {
+                "executionArn": "arn:aws:states:region:account-id:execution:stateMachineName:executionName"
+            },
+            "responses": [
+                {
+                    "executionArn": "arn:aws:states:region:account-id:execution:stateMachineName:executionName",
+                    "stateMachineArn": "arn:aws:states:region:account-id:stateMachine:stateMachineName",
+                    "name": "executionName",
+                    "status": "RUNNING",
+                    "startDate": "2024-07-22T00:00:00.000Z",
+                    "input": "{\"key\": \"value\"}"
+                },
+                {
+                    "executionArn": "arn:aws:states:region:account-id:execution:stateMachineName:executionName",
+                    "stateMachineArn": "arn:aws:states:region:account-id:stateMachine:stateMachineName",
+                    "name": "executionName",
+                    "status": "RUNNING",
+                    "startDate": "2024-07-22T00:00:00.000Z",
+                    "input": "{\"key\": \"value\"}"
+                },
+                {
+                    "executionArn": "arn:aws:states:region:account-id:execution:stateMachineName:executionName",
+                    "stateMachineArn": "arn:aws:states:region:account-id:stateMachine:stateMachineName",
+                    "name": "executionName",
+                    "status": "RUNNING",
+                    "startDate": "2024-07-22T00:00:00.000Z",
+                    "input": "{\"key\": \"value\"}"
+                },
+                {
+                    "executionArn": "arn:aws:states:region:account-id:execution:stateMachineName:executionName",
+                    "stateMachineArn": "arn:aws:states:region:account-id:stateMachine:stateMachineName",
+                    "name": "executionName",
+                    "status": "FAILED",
+                    "startDate": "2024-07-22T00:00:00.000Z",
+                    "stopDate": "2024-07-22T01:00:00.000Z",
+                    "input": "{\"key\": \"value\"}",
+                    "output": "{\"cause\": {\"errorType\": \"ValueError\", \"errorMessage\": \"This is a test error message\"}}"
+                }
+            ]
+        },
+        "poll_kwargs": {
+            "step_fun": "step_constant",
+            "step_fun_kwargs": {
+                "step": 0.01
+            }
+        }
+    },
+    "expected_output": {
+        "executionArn": "arn:aws:states:region:account-id:execution:stateMachineName:executionName",
+        "stateMachineArn": "arn:aws:states:region:account-id:stateMachine:stateMachineName",
+        "name": "executionName",
+        "status": "FAILED",
+        "startDate": "2024-07-22T00:00:00.000Z",
+        "stopDate": "2024-07-22T01:00:00.000Z",
+        "input": "{\"key\": \"value\"}",
+        "output": "{\"cause\": {\"errorType\": \"ValueError\", \"errorMessage\": \"This is a test error message\"}}"
+    }
+}
