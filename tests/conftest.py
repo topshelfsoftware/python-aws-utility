@@ -78,6 +78,7 @@ def convert_yaml_to_dict(yaml_fp: str) -> dict:
         yaml_dict = yaml.safe_load(fp)
     return yaml_dict
 
+
 def print_section_break(char: str = "-") -> str:
     """Print a section break the width of the terminal
     by using a string of characters."""
