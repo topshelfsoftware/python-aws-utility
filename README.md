@@ -59,7 +59,7 @@ make format
 
 ### Package and Lambda Layer
 
-Build the `topshelfsoftware-aws-util` Python package as a wheel and copy it to the local PyPI repository
+Build the `topshelfsoftware-aws-util` Python package as a wheel and copy it to the local PyPI repository defined by the contents in a file named `local_pypi_dir.txt` in the project root directory
 
 ```bash
 make package
