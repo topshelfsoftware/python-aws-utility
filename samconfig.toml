@@ -16,5 +16,5 @@ tags = [
     "CustomerId=00000"
 ]
 parameter_overrides = [
-    "PackageVersion=v0.3.0"
+    "PackageVersion=v0.4.0"
 ]
