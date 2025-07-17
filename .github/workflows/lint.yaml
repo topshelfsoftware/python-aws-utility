@@ -1,0 +1,28 @@
+name: Lint Checks
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  lint-checks:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out repo  # for deps and source code
+        uses: actions/checkout@v4
+
+      - name: Install Python 3.12
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Setup dev environment
+        run: make setup
+
+      - name: Lint code
+        run: make lint
