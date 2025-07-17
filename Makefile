@@ -36,7 +36,7 @@ update: setup pip-install pre-commit-install
 $(VENV_DIR)/bin/activate:
 	@$(MAKE) clean
 	@echo "Setting up development environment using $(PYTHON3)..."
-	$(PYTHON3) -m venv $(VENV_DIR)
+	$(PYTHON3) -m venv $(VENV_DIR) --upgrade-deps
 	@$(MAKE) pip-install
 	@$(MAKE) pre-commit-install
 	@echo "Development environment setup complete."
