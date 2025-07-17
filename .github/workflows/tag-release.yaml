@@ -1,0 +1,10 @@
+name: Tag + Release
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  tag-and-release:
+    uses: topshelfsoftware/.github/.github/workflows/repo-tag-and-release.yaml@main

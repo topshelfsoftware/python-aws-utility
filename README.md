@@ -79,6 +79,7 @@ IMPORTANT❗
 Search the project for the existing package version and update in the following places prior to building the package and deploying the lambda layer:
 
 - shields.io badge in this `README`
+- `VERSION` file in the project root dir
 - `PKG_VER` variable in the project `Makefile`
 - `version` in the poetry `pyproject.toml`
 - `PackageVersion` parameter in the `samconfig.toml`
