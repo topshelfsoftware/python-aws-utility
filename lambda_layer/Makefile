@@ -7,14 +7,13 @@
 SHELL := /bin/bash
 MAKEFILE_PATH := $(abspath $(lastword $(MAKEFILE_LIST)))
 MAKEFILE_DIR := $(realpath $(dir $(MAKEFILE_PATH)))
-CWD := $(notdir $(patsubst %/,%,$(dir $(MAKEFILE_PATH))))
-VENV_DIR := $(MAKEFILE_DIR)/../.venv
+PROJECT_ROOT_DIR := $(MAKEFILE_DIR)/..
 ifndef ARTIFACTS_DIR
 	ARTIFACTS_DIR := $(MAKEFILE_DIR)/artifacts
 endif
 
 # function to activate the python virtual env
-activate = . $(VENV_DIR)/bin/activate && $1
+activate = . $(PROJECT_ROOT_DIR)/.venv/bin/activate && $1
 
 # build target
 build-TopshelfsoftwareAwsUtilLayer:
@@ -25,7 +24,7 @@ build-TopshelfsoftwareAwsUtilLayer:
 	$(call activate,python -m pip install --upgrade pip)
 
 	@echo "Installing python packages ** without ** dependencies"
-	$(call activate,python -m pip install -r $(MAKEFILE_DIR)/no_deps/requirements.txt -t "$(ARTIFACTS_DIR)/python" --upgrade --no-deps)
+	$(call activate,python -m pip install --find-links=$(PROJECT_ROOT_DIR)/dist -r $(MAKEFILE_DIR)/no_deps/requirements.txt -t "$(ARTIFACTS_DIR)/python" --upgrade --no-deps)
 
 	@echo "Installing python packages ** with ** dependencies"
 	$(call activate,python -m pip install -r $(MAKEFILE_DIR)/deps/requirements.txt -t "$(ARTIFACTS_DIR)/python" --upgrade)

@@ -91,7 +91,7 @@ package:
 	fi
 
 # Lambda layer deployment
-deploy-layer: check-user-inp
+deploy-layer: check-user-inp package
 	export AWS_PROFILE=$(AWS_PROFILE) && \
 		cd $(PROJ_ROOT_DIR) && \
 		sam build --config-file samconfig.toml && \
