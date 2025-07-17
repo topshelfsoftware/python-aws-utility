@@ -5,7 +5,7 @@ Utility functions for interacting with AWS.
 | | |
 | --- | --- |
 | Testing | [![CI - Test](https://github.com/topshelfsoftware/python-aws-utility/actions/workflows/unit-tests.yaml/badge.svg)](https://github.com/topshelfsoftware/python-aws-utility/actions/workflows/unit-tests.yaml) [![codecov](https://codecov.io/gh/topshelfsoftware/python-aws-utility/graph/badge.svg?token=SK77CYUOBP)](https://codecov.io/gh/topshelfsoftware/python-aws-utility) |
-| Package | [![Build Status](https://github.com/topshelfsoftware/python-aws-utility/actions/workflows/build.yaml/badge.svg)](https://github.com/topshelfsoftware/python-aws-utility/actions/workflows/build.yaml) ![Package Version](https://img.shields.io/badge/latest-v0.3.0-blue) ![Python Versions](https://img.shields.io/badge/python-3.9_%7C_3.10_%7C_3.11_%7C_3.12-blue?logo=python&logoColor=yellow) |
+| Package | [![Build Status](https://github.com/topshelfsoftware/python-aws-utility/actions/workflows/build.yaml/badge.svg)](https://github.com/topshelfsoftware/python-aws-utility/actions/workflows/build.yaml) ![Package Version](https://img.shields.io/badge/latest-v0.4.0-blue) ![Python Versions](https://img.shields.io/badge/python-3.9_%7C_3.10_%7C_3.11_%7C_3.12-blue?logo=python&logoColor=yellow) |
 | Meta | [![License](https://img.shields.io/github/license/topshelfsoftware/python-aws-utility)](https://github.com/topshelfsoftware/python-aws-utility/blob/main/LICENSE) |
 
 ## Getting Started
@@ -59,7 +59,7 @@ make format
 
 ### Package and Lambda Layer
 
-Build the `topshelfsoftware-aws-util` Python package as a wheel and copy it to the local PyPI repository
+Build the `topshelfsoftware-aws-util` Python package as a wheel and copy it to the local PyPI repository defined by the contents in a file named `local_pypi_dir.txt` in the project root directory
 
 ```bash
 make package
@@ -79,6 +79,7 @@ IMPORTANT❗
 Search the project for the existing package version and update in the following places prior to building the package and deploying the lambda layer:
 
 - shields.io badge in this `README`
+- `VERSION` file in the project root dir
 - `PKG_VER` variable in the project `Makefile`
 - `version` in the poetry `pyproject.toml`
 - `PackageVersion` parameter in the `samconfig.toml`

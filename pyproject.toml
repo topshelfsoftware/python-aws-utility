@@ -4,7 +4,7 @@ build-backend = "poetry.core.masonry.api"
 
 [tool.poetry]
 name = "topshelfsoftware_aws_util"
-version = "0.3.0"
+version = "0.4.0"
 description = "Utility functions for interacting with AWS."
 license="MIT"
 authors = [

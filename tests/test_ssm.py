@@ -60,8 +60,8 @@ def test_01_get_ssm_value(get_event_as_dict):
         stubber.activate()
 
         # Test the source code
-        secret = get_ssm_value(stub_params["Name"])
-        assert secret == expected_output["ssm_value"]
+        val = get_ssm_value(stub_params["Name"], stub_params["WithDecryption"])
+        assert val == expected_output["ssm_value"]
     finally:
         # Deactivate the stubber
         stubber.deactivate()
@@ -90,7 +90,7 @@ def test_02_get_ssm_value(get_event_as_dict):
 
         # Test the source code
         with pytest.raises(KeyError):
-            get_ssm_value(stub_params["Name"])
+            get_ssm_value(stub_params["Name"], stub_params["WithDecryption"])
     finally:
         # Deactivate the stubber
         stubber.deactivate()
@@ -126,7 +126,7 @@ def test_03_get_ssm_value(get_event_as_dict):
 
         # Test the source code
         with pytest.raises(eval(exception)):
-            get_ssm_value(stub_params["Name"])
+            get_ssm_value(stub_params["Name"], stub_params["WithDecryption"])
     finally:
         # Deactivate the stubber
         stubber.deactivate()

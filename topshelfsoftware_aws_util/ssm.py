@@ -10,13 +10,21 @@ ssm_client = create_boto3_client(service_name="ssm")
 logger = get_logger(__name__, stream=None)
 
 
-def get_ssm_value(name: str) -> str:
+def get_ssm_value(name: str, with_decryption: bool = False) -> str:
     """Retrieve the value of an SSM parameter.
 
     Parameters
     ----------
     name: str
         Name of the SSM parameter.
+
+    with_decryption: bool, optional
+        When `True` the parameter value will be decrypted if it is a
+        SecureString. If `False`, the encrypted ciphertext will be
+        returned as is. Note: `True` is also acceptable if the parameter
+        is not a SecureString, in which case it will simply return the
+        plaintext value.
+        Defaults to `False`.
 
     Returns
     -------
@@ -25,7 +33,9 @@ def get_ssm_value(name: str) -> str:
     """
     logger.debug(f"getting ssm: {name}")
     try:
-        ssm_resp = ssm_client.get_parameter(Name=name)
+        ssm_resp = ssm_client.get_parameter(
+            Name=name, WithDecryption=with_decryption
+        )
         logger.debug(f"resp: {fmt_json(ssm_resp)}")
         val = ssm_resp["Parameter"]["Value"]
     except BotoClientError as e:

@@ -21,7 +21,7 @@ else
     LOCAL_PYPI_DIR := $(shell cat ${LOCAL_PYPI_FP})
 endif
 PKG_NAME := topshelfsoftware_aws_util
-PKG_VER := 0.3.0
+PKG_VER := 0.4.0
 
 ####### BUILD TARGETS #######
 
@@ -36,7 +36,7 @@ update: setup pip-install pre-commit-install
 $(VENV_DIR)/bin/activate:
 	@$(MAKE) clean
 	@echo "Setting up development environment using $(PYTHON3)..."
-	$(PYTHON3) -m venv $(VENV_DIR)
+	$(PYTHON3) -m venv $(VENV_DIR) --upgrade-deps
 	@$(MAKE) pip-install
 	@$(MAKE) pre-commit-install
 	@echo "Development environment setup complete."
@@ -91,7 +91,7 @@ package:
 	fi
 
 # Lambda layer deployment
-deploy-layer: check-user-inp
+deploy-layer: check-user-inp package
 	export AWS_PROFILE=$(AWS_PROFILE) && \
 		cd $(PROJ_ROOT_DIR) && \
 		sam build --config-file samconfig.toml && \

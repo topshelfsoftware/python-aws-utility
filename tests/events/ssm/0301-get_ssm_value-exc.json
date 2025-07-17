@@ -4,7 +4,8 @@
         "stub": {
             "method": "get_parameter",
             "parameters": {
-                "Name": "test_parameter"
+                "Name": "test_parameter",
+                "WithDecryption": false
             },
             "response": {
                 "Error": {
