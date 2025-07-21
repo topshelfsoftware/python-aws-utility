@@ -1,15 +1,15 @@
 {
-    "description": "Mock boto3 and verify the systems manager parameter is successfully retrieved",
+    "description": "Mock boto3 and verify the systems manager parameter value (String) is successfully retrieved",
     "input": {
         "stub": {
             "method": "get_parameter",
             "parameters": {
-                "Name": "test_parameter",
+                "Name": "/test_parameter",
                 "WithDecryption": true
             },
             "response": {
                 "Parameter": {
-                    "Name": "test_parameter",
+                    "Name": "/test_parameter",
                     "Type": "String",
                     "Value": "test_value",
                     "Version": 1,
