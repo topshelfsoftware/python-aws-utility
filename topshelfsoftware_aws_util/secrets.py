@@ -4,7 +4,6 @@ from botocore.exceptions import ClientError as BotoClientError
 
 from topshelfsoftware_aws_util.client import create_boto3_client
 from topshelfsoftware_logging import get_logger
-from topshelfsoftware_util.json import fmt_json
 
 secret_client = create_boto3_client(service_name="secretsmanager")
 logger = get_logger(__name__, stream=None)
@@ -26,7 +25,6 @@ def get_secret_value(secret_id: str) -> str:
     logger.debug(f"getting secret: {secret_id}")
     try:
         secret_resp = secret_client.get_secret_value(SecretId=secret_id)
-        logger.debug(f"resp: {fmt_json(secret_resp)}")
         val = secret_resp["SecretString"]
     except BotoClientError as e:
         logger.error(f"failed to retrieve secret: {secret_id}. Reason: {e}")
