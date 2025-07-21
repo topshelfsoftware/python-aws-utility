@@ -38,6 +38,7 @@ def get_ssm_value(name: str, with_decryption: bool = False) -> str:
         )
         logger.debug(f"resp: {fmt_json(ssm_resp)}")
         val = ssm_resp["Parameter"]["Value"]
+        type_ = ssm_resp["Parameter"]["Type"]
     except BotoClientError as e:
         logger.error(f"failed to retrieve ssm parameter: {name}. Reason: {e}")
         raise e
@@ -47,5 +48,9 @@ def get_ssm_value(name: str, with_decryption: bool = False) -> str:
             f"{name}. Reason: {e}"
         )
         raise e
-    logger.debug(f"ssm parameter value: {val}")
+    (
+        logger.debug(f"ssm parameter value: {val}")
+        if type_ != "SecureString"
+        else logger.debug("ssm parameter value: <redacted>")
+    )
     return val

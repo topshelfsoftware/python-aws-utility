@@ -1,16 +1,17 @@
 {
-    "description": "Mock boto3 to trigger an expected KeyError",
+    "description": "Mock boto3 and verify the systems manager parameter value (SecureString) is successfully retrieved",
     "input": {
         "stub": {
             "method": "get_parameter",
             "parameters": {
                 "Name": "/test_parameter",
-                "WithDecryption": false
+                "WithDecryption": true
             },
             "response": {
                 "Parameter": {
                     "Name": "/test_parameter",
-                    "Type": "String",
+                    "Type": "SecureString",
+                    "Value": "test_value",
                     "Version": 1,
                     "LastModifiedDate": "2024-07-22T00:00:00.000Z",
                     "ARN": "arn:aws:ssm:region:account-id:parameter/test_parameter"
@@ -18,5 +19,7 @@
             }
         }
     },
-    "expected_output": {}
+    "expected_output": {
+        "ssm_value": "test_value"
+    }
 }

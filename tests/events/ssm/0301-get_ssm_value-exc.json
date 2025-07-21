@@ -4,13 +4,13 @@
         "stub": {
             "method": "get_parameter",
             "parameters": {
-                "Name": "test_parameter",
+                "Name": "/test_parameter",
                 "WithDecryption": false
             },
             "response": {
                 "Error": {
                     "Code": "ParameterNotFound",
-                    "Message": "Parameter test_parameter not found.",
+                    "Message": "Parameter /test_parameter not found.",
                     "Type": "Client",
                     "HttpStatusCode": 400
                 }
