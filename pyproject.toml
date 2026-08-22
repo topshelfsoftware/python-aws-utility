@@ -14,7 +14,7 @@ readme = "./docs/README.md"
 repository = "https://github.com/topshelfsoftware/python-aws-utility"
 
 [tool.poetry.dependencies]
-python = "^3.9"
+python = "^3.10"
 boto3 = "^1.26"
 topshelfsoftware_polling = { git = "https://github.com/topshelfsoftware/python-polling.git", tag = "v0.1.0" }
 topshelfsoftware_util = { git = "https://github.com/topshelfsoftware/python-utility.git", tag = "v2.0.0" }
