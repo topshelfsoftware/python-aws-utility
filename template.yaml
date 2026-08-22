@@ -27,10 +27,10 @@ Resources:
       Description: !Ref PackageVersion
       ContentUri: lambda_layer/
       CompatibleRuntimes:
-        - python3.9
         - python3.10
         - python3.11
         - python3.12
+        - python3.13
       LicenseInfo: MIT
       RetentionPolicy: Retain
   

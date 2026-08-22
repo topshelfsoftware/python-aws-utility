@@ -5,14 +5,14 @@ Utility functions for interacting with AWS.
 | | |
 | --- | --- |
 | Testing | [![CI - Test](https://github.com/topshelfsoftware/python-aws-utility/actions/workflows/unit-tests.yaml/badge.svg)](https://github.com/topshelfsoftware/python-aws-utility/actions/workflows/unit-tests.yaml) [![codecov](https://codecov.io/gh/topshelfsoftware/python-aws-utility/graph/badge.svg?token=SK77CYUOBP)](https://codecov.io/gh/topshelfsoftware/python-aws-utility) |
-| Package | [![Build Status](https://github.com/topshelfsoftware/python-aws-utility/actions/workflows/build.yaml/badge.svg)](https://github.com/topshelfsoftware/python-aws-utility/actions/workflows/build.yaml) ![Package Version](https://img.shields.io/badge/latest-v1.0.0-blue) ![Python Versions](https://img.shields.io/badge/python-3.9_%7C_3.10_%7C_3.11_%7C_3.12-blue?logo=python&logoColor=yellow) |
+| Package | [![Build Status](https://github.com/topshelfsoftware/python-aws-utility/actions/workflows/build.yaml/badge.svg)](https://github.com/topshelfsoftware/python-aws-utility/actions/workflows/build.yaml) ![Package Version](https://img.shields.io/badge/latest-v1.0.0-blue) ![Python Versions](https://img.shields.io/badge/python-3.10_%7C_3.11_%7C_3.12_%7C_3.13-blue?logo=python&logoColor=yellow) |
 | Meta | [![License](https://img.shields.io/github/license/topshelfsoftware/python-aws-utility)](https://github.com/topshelfsoftware/python-aws-utility/blob/main/LICENSE) |
 
 ## Getting Started
 
 ### Prerequisites
 
-1. Python 3.9 | 3.10 | 3.11 | 3.12 installed on system
+1. Python 3.10 | 3.11 | 3.12 | 3.13 installed on system
 2. `aws-sam-cli` with "sam" on system path
 3. Optionally, create a file named `local_pypi_dir.txt` in the project root directory (same folder as this `README`)
     - Contents of file are a single line defining the path to a local directory to be used as a local PyPI repository.
